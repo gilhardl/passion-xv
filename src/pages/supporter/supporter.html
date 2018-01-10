@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle><ion-icon name='menu'></ion-icon></button>
+    </ion-buttons>
+    <ion-title>
+      Club house
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <ion-segment [(ngModel)]="supporterSegment">
+      <ion-segment-button value="news">
+        3<sup>ème</sup> mi-temps
+      </ion-segment-button>
+      <ion-segment-button value="pictures">
+        Photos
+      </ion-segment-button>
+      <ion-segment-button value="movies">
+        Vidéos
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+    
+  <div [ngSwitch]="supporterSegment" padding>
+    <ion-list *ngSwitchCase="'news'">
+      <ion-item>
+        Aucun ragot
+      </ion-item>
+    </ion-list>
+  
+    <ion-list *ngSwitchCase="'pictures'">
+      <ion-item>
+        Aucune photo
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'movies'">
+        <ion-item>
+          Aucune vidéo
+        </ion-item>
+      </ion-list>
+  </div>
+</ion-content>

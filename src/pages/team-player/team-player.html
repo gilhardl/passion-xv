@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar  color="primary">
+    <ion-title>{{ player?.firstname }} {{player?.lastname}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="savePlayer()"><ion-icon name="checkmark"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <!-- INFOS -->
+  <ion-list>
+    <ion-list-header color="light">Infos</ion-list-header>
+    <ion-item>
+      <ion-label fixed>Prénom</ion-label>
+      <ion-input [(ngModel)]="player.firstname"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>Nom</ion-label>
+      <ion-input [(ngModel)]="player.lastname"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>Naissance</ion-label>
+      <ion-datetime displayFormat="DD/MM/YY" pickerFormat="DD MM YYYY" [(ngModel)]="player.birthdate"></ion-datetime>
+    </ion-item>
+  </ion-list>
+
+  <!-- CONTACT -->
+  <ion-list>
+    <ion-list-header color="light">Contact</ion-list-header>
+    <ion-item>
+      <ion-label fixed>Mail</ion-label>
+      <ion-input type="mail" [(ngModel)]="player.mail"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>Portable</ion-label>
+      <ion-input type="phone" [(ngModel)]="player.phone"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>

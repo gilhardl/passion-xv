@@ -1,40 +1,59 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { MyApp } from './app.component';
-
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
-import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { MyApp } from './app.component';
+
+// FIREBASE
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { FIREBASE_CONFIG } from './firebase.credentials';
+
+// SERVICES GLOBAUX
+import { GlobalVarService } from '../services/global-var/global-var.service';
+import { ToastService } from '../services/toast/toast.service';
+
+import { PeopleService } from '../services/people/people.service';
+
+// MODULES DE PAGES
+import { TabsModule } from '../pages/tabs/tabs.module';
+import { LoginPageModule } from '../pages/login/login.module';
+import { SchedulePageModule } from '../pages/schedule/schedule.module';
+import { TeamPageModule } from '../pages/team/team.module';
+import { TeamPlayerPageModule } from '../pages/team-player/team-player.module';
+import { SupporterPageModule } from '../pages/supporter/supporter.module';
+
 @NgModule({
   declarations: [
-    MyApp,
-    AboutPage,
-    ContactPage,
-    HomePage,
-    TabsPage
+    MyApp
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(FIREBASE_CONFIG),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
+    LoginPageModule,
+    TabsModule,
+    SchedulePageModule,
+    TeamPageModule,
+    TeamPlayerPageModule,
+    SupporterPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
-    AboutPage,
-    ContactPage,
-    HomePage,
-    TabsPage
+    MyApp
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    GlobalVarService,
+    ToastService,
+    PeopleService
   ]
 })
-export class AppModule {}
+export class AppModule { }

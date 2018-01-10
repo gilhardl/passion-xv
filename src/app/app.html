@@ -1,1 +1,33 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu class="app-menu" [content]="content">
+    <ion-header>
+        <ion-list>
+            <ion-item>
+                <ion-avatar item-start>
+                    <img src="assets/imgs/logo.png">
+                </ion-avatar>
+                <h3>{{ currentUser?.displayName }}</h3>
+                <h3>{{ currentUser?.firstname }}</h3>
+                <ion-buttons item-end>
+                    <button ion-button clear><ion-icon name="settings"></ion-icon></button>
+                </ion-buttons>
+            </ion-item>
+            
+            <ion-item>
+                <ion-select title="Equipe à gérer" interface="action-sheet" cancelText="Annuler" [(ngModel)]="selectedTeam">
+                    <ion-option value="rcbseniors">RCB Séniors</ion-option>
+                    <ion-option value="rcbu18">RCB U18</ion-option>
+                </ion-select>
+                <ion-buttons item-end>
+                    <button ion-button clear><ion-icon name="add"></ion-icon></button>
+                </ion-buttons>
+            </ion-item>
+        </ion-list>
+    </ion-header>
+
+    <ion-content>
+        <button ion-button clear (click)="logOut()">Déconnexion</button>
+    </ion-content>
+
+</ion-menu>
+
+<ion-nav #content [root]="rootPage"></ion-nav>

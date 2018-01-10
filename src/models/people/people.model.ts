@@ -1,0 +1,13 @@
+
+import { PeopleType } from './people-type.enum';
+
+export interface People {
+    key?: string;
+    lastname: string;
+    firstname: string;
+    birthdate?: string;
+    mail?: string;
+    phone?: string;
+    type: PeopleType;
+    teams: string[]; // Tableau de myTeam.key auxquelles la personne est liée
+}

@@ -1,0 +1,45 @@
+
+<ion-content padding>
+  
+  <img src="assets/imgs/slogan.png" />
+  
+  <!-- Formulaire de connexion par mail -->
+  <ion-item>
+    <ion-label floating color="dark">Adresse email</ion-label>
+    <ion-input type="email"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating color="dark">Mot de passe</ion-label>
+    <ion-input type="password"></ion-input>
+  </ion-item>
+
+  <!-- Bouton CONNEXION -->
+  <button class="logInBtn" (click)="logIn()" ion-button color="light" >Connexion</button>
+
+  <!-- Connexion avec les réseaux sociaux -->
+  <ion-card>
+    <ion-grid>
+      
+      <h2>Connexion avec ...</h2>
+      
+      <ion-row>
+        <ion-col>
+          <!-- Google -->
+          <button ion-button clear (click)="logInGoogle()">
+            <img src="assets/imgs/google.png" style="width: auto; height: 100%;"/>
+          </button>
+        </ion-col>
+        <ion-col>
+          <!-- Facebook -->
+          <button ion-button clear (click)="logInFacebook()">
+            <img src="assets/imgs/facebook.png" style="width: auto; height: 100%;"/>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <!-- Bouton INSCRIPTION -->
+  <button class="signUpBtn" (click)="signUp()" ion-button full outline color="light">Vous n'avez pas encore de compte ?</button>
+</ion-content>
+        

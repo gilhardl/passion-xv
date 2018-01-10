@@ -1,0 +1,23 @@
+
+<ion-list>
+    <ion-item ng-show="signInAuth">
+        <ion-label color="dark" floating>NOM</ion-label>
+        <ion-input type="text"></ion-input>
+    </ion-item>
+    <ion-item ng-show="signInAuth">
+        <ion-label color="dark" floating>Prénom</ion-label>
+        <ion-input type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="dark" floating>Adresse mail</ion-label>
+        <ion-input type="email"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label color="dark" floating>Mot de passe</ion-label>
+        <ion-input type="password"></ion-input>
+    </ion-item>
+    <ion-item ng-show="signInAuth">
+        <ion-input type="password" placeholder="Confirmez le mot de passe"></ion-input>
+    </ion-item>
+    <button ion-button clear (clic)="signInBasic()"></button>
+</ion-list>

@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button menuToggle><ion-icon name='menu'></ion-icon></button>
+    </ion-buttons>
+    <ion-title>
+      Effectif
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item-sliding>
+      <ion-item *ngFor="let player of playerList$ | async" navPush="page-team-player" [navParams]="{player: player}">
+        {{ player.firstname }} {{ player.lastname }}
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="deletePlayer(player)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-fab bottom right>
+    <button ion-fab (click)="addPlayer()"><ion-icon name="add"> </ion-icon></button>
+  </ion-fab>
+</ion-content>
