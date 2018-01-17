@@ -2,18 +2,14 @@ import { NgModule } from '@angular/core';
 
 import { IonicPageModule } from 'ionic-angular';
 import { LoginPage } from './login';
-import { BasicAuthComponent } from './basic-auth.component';
 
 @NgModule({
   declarations: [
-    LoginPage,
-    BasicAuthComponent
+    LoginPage
   ],
   imports: [
     IonicPageModule.forChild(LoginPage),
   ],
-  entryComponents: [
-    BasicAuthComponent
-  ]
+  entryComponents: [ ]
 })
 export class LoginPageModule {}

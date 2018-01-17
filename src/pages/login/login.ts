@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angu
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
-import { BasicAuthComponent } from './basic-auth.component';
 import { ToastService } from '../../services/toast/toast.service';
 
 @IonicPage({
@@ -12,34 +11,72 @@ import { ToastService } from '../../services/toast/toast.service';
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
-  entryComponents: [
-    BasicAuthComponent
-  ]
+  entryComponents: [ ]
 })
 export class LoginPage {
+
+  private userEmail: string;
+  private userPassword: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, 
     public afAuth: AngularFireAuth, public modalCtrl: ModalController,
     public toastService: ToastService) { }
 
-  signUp() {
-    let modal = this.modalCtrl.create(BasicAuthComponent);
-    modal.present();
+  // Créer un utilisateur Firebase
+  createUser() {
+    this.afAuth.auth.createUserWithEmailAndPassword(this.userEmail, this.userPassword)
+      .then( result => {
+          console.log(result);
+      })
+      .catch( error => {
+        // Si il y a une erreur on affiche un toast
+        switch(error.code) {
+          case 'auth/email-already-in-use':
+            this.toastService.show("Un utilisateur avec cette adresse mail existe déjà");
+          case 'auth/invalid-email':
+            this.toastService.show("Adresse mail incorrect");
+          case 'auth/weak-password':
+            this.toastService.show("Mot de passe trop faible");
+          case undefined:
+            this.toastService.show(error.message);
+        }
+      });    
   }
 
-  logIn() { }
+  logIn() {
+    this.afAuth.auth.signInWithEmailAndPassword(this.userEmail, this.userPassword)
+      .then( result => {
+        var token = result.credential.accessToken;  // This gives you a Google Access Token. You can use it to access the Google API.
+        var user = result.user;
+        console.log(token);
+        console.log(user);
+      })
+      .catch( (error) => {
+        // Si il y a une erreur on affiche un toast
+        switch(error.code) {
+          case 'auth/invalid-email':
+            this.toastService.show("Adresse mail incorrect");
+          case 'auth/user-disabled':
+            this.toastService.show("Votre compte a été désactivé");
+          case 'auth/user-not-found':
+            this.toastService.show("Utilisateur inconnu");
+          case 'auth/wrong-password':
+            this.toastService.show("Mot de passe incorrect");
+          case undefined:
+          this.toastService.show(error.message);
+        }
+      });
+  }
 
+  // Connexion / Inscription avec Google
   logInGoogle() {
     this.afAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider())
       .then( () => {
         return firebase.auth().getRedirectResult();
       })
       .then( result => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
-        // The signed-in user info.
+        var token = result.credential.accessToken;  // This gives you a Google Access Token. You can use it to access the Google API.
         var user = result.user;
-        // ...
         console.log(token);
         console.log(user);
       })
