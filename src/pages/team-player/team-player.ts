@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ToastService } from '../../services/toast/toast.service';
 import { PeopleService } from '../../services/people/people.service';
 import { People } from '../../models/people/people.model';
-import { PeopleType } from '../../models/people/people-type.enum';
+// import { PeopleType } from '../../models/people/people-type.enum';
 
 @IonicPage({
   name: 'page-team-player'
