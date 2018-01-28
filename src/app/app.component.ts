@@ -45,7 +45,7 @@ export class MyApp {
             .then( snapchot => {
               if(snapchot.val() == undefined) {
                 // Nouvel utilisateur
-                this.appCtrl.getActiveNavs()[0].setRoot('page-getting-started');  // Affiche le Get started
+                this.appCtrl.getActiveNavs()[0].setRoot('page-getting-started', {userKey: user.uid, displayName: user.displayName, email: user.email});  // Affiche le Get started
               } else {
                 // Utilisateur existant
                 if (currentView == 'LoginPage'){

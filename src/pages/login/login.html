@@ -1,17 +1,19 @@
 
-<ion-content padding>
+<ion-content pager>
   
-  <img src="assets/imgs/slogan.png" />
+  <!-- <img src="assets/imgs/slogan.png" /> -->
   
   <!-- Formulaire de connexion par mail -->
-  <ion-item>
-    <ion-label floating color="dark">Adresse email</ion-label>
-    <ion-input type="email" [(ngModel)]="userEmail"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label floating color="dark">Mot de passe</ion-label>
-    <ion-input type="password" [(ngModel)]="userPassword"></ion-input>
-  </ion-item>
+  <ion-list>
+    <ion-item>
+      <ion-label floating color="dark">Adresse email</ion-label>
+      <ion-input type="email" [(ngModel)]="userEmail"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating color="dark">Mot de passe</ion-label>
+      <ion-input type="password" [(ngModel)]="userPassword"></ion-input>
+    </ion-item>
+  </ion-list>
 
   <!-- Bouton CONNEXION -->
   <button class="logInBtn" (click)="logIn()" ion-button color="light" >Connexion</button>
@@ -40,6 +42,6 @@
   </ion-card>
 
   <!-- Bouton INSCRIPTION -->
-  <button class="signUpBtn" (click)="createUser()" ion-button full outline color="light">Pas encore inscrit ? Rejoins nous !</button>
+  <button class="signUpBtn" (click)="createUser()" ion-button full outline color="dark">Pas encore inscrit ? Rejoins nous !</button>
 </ion-content>
         

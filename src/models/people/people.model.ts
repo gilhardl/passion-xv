@@ -7,7 +7,7 @@ export interface People {
     lastname: string;
     firstname: string;
     birthdate?: string;
-    mail?: string;
+    email?: string;
     phone?: string;
     type: PeopleType;
     teams: string[]; // Tableau de team.key auxquelles la personne est liée

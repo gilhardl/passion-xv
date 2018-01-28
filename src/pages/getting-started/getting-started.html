@@ -7,12 +7,71 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>GettingStarted</ion-title>
+    <ion-buttons right>
+      <button ion-button color="primary" (click)="nextSlide()">CONTINUER</button>
+    </ion-buttons>
+    <ion-title color="dark">
+      {{ pageTitle }}
+    </ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-slides pager>
 
+    <!-- SLIDE 1 -->
+    <ion-slide>
+      <!-- Nom et Prénom -->
+      <ion-list>
+        <ion-item>
+          <ion-label>Nom</ion-label>
+          <ion-input floating [(ngModel)]="user.lastname"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Prénom</ion-label>
+          <ion-input floating [(ngModel)]="user.firstname"></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <!-- Type d'utilisateur -->
+      <ion-list radio-group [(ngModel)]="user.type">
+        <ion-list-header>Vous êtes...</ion-list-header>
+        
+        <ion-item>
+          <ion-label>Joueur</ion-label>
+          <ion-radio value="player"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Entraineur</ion-label>
+          <ion-radio value="coach"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Entraineur / Joueur</ion-label>
+          <ion-radio value="coachplayer"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Supporter</ion-label>
+          <ion-radio value="supporter"></ion-radio>
+        </ion-item>
+      </ion-list>
+    </ion-slide>
+    <!-- FIN SLIDE 1 -->
+
+    <!-- SLIDE 2 -->
+    <ion-slide>
+      <h1>Votre équipe</h1>
+      <h4>Bientôt dispo...</h4>
+      <button ion-button clear (click)="nextSlide()">Continuer</button>
+    </ion-slide>
+    <!-- FIN SLIDE 2 -->
+    
+    <!-- SLIDE 3 -->
+    <ion-slide>
+      <h2 color="dark">Bienvenu sur Passion XV</h2>
+      <button ion-button clear (click)="goHome()">C'est parti !</button>
+    </ion-slide>
+    <!-- FIN SLIDE 3 -->
+  </ion-slides>
 </ion-content>
