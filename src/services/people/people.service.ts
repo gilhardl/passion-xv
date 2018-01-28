@@ -25,6 +25,14 @@ export class PeopleService {
             })
     }
 
+    getByUserKey(userKey: string) {
+        return this.peopleRef.query
+            .orderByChild('userKey').equalTo(userKey)
+            .once('value', snapchot => {
+              console.log(snapchot.val());
+            });
+    }
+
     getBlank() {
         return {
             lastname: '',

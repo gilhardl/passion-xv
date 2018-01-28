@@ -21,6 +21,7 @@ import { PeopleService } from '../services/people/people.service';
 // MODULES DE PAGES
 import { TabsModule } from '../pages/tabs/tabs.module';
 import { LoginPageModule } from '../pages/login/login.module';
+import { GettingStartedPageModule } from '../pages/getting-started/getting-started.module'
 import { SchedulePageModule } from '../pages/schedule/schedule.module';
 import { TeamPageModule } from '../pages/team/team.module';
 import { TeamPlayerPageModule } from '../pages/team-player/team-player.module';
@@ -36,6 +37,7 @@ import { SupporterPageModule } from '../pages/supporter/supporter.module';
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    GettingStartedPageModule,
     LoginPageModule,
     TabsModule,
     SchedulePageModule,

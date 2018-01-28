@@ -10,5 +10,5 @@ export interface People {
     mail?: string;
     phone?: string;
     type: PeopleType;
-    teams: string[]; // Tableau de myTeam.key auxquelles la personne est liée
+    teams: string[]; // Tableau de team.key auxquelles la personne est liée
 }
