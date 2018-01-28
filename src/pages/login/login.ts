@@ -15,8 +15,8 @@ import { ToastService } from '../../services/toast/toast.service';
 })
 export class LoginPage {
 
-  private userEmail: string;
-  private userPassword: string;
+  private userEmail: string = "";
+  private userPassword: string = "";
 
   constructor(public navCtrl: NavController, public navParams: NavParams, 
     public afAuth: AngularFireAuth, public modalCtrl: ModalController,
@@ -24,6 +24,13 @@ export class LoginPage {
 
   // Créer un utilisateur Firebase
   createUser() {
+    // Vérification saisie
+    if(this.userEmail == '' || this.userPassword == '') {
+      this.toastService.show('Veuillez renseigner une adresse email et un mot de passe');
+      return;
+    }
+
+    // Crée l'utilisateur sur Firebase
     this.afAuth.auth.createUserWithEmailAndPassword(this.userEmail, this.userPassword)
       .then( result => {
           console.log(result);
@@ -96,7 +103,31 @@ export class LoginPage {
       });
   }
 
+  // Connexion / Inscription avec Facebook
   logInFacebook() {
+    // Création du provider FB
+    let provider = new firebase.auth.FacebookAuthProvider();
+    // On indique dans le provider qu'on veut récupérer le profile public de l'utilisateur
+    provider.addScope('public_profile');
 
+    // Demande de connexion FB
+    this.afAuth.auth.signInWithPopup(provider)
+      .then( result => {
+        console.log(result);
+      })
+      .catch( error => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+        console.log(errorCode);
+        console.log(errorMessage);
+        console.log(email);
+        console.log(credential); 
+      })
   }
 }
