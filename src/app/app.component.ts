@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Platform, App, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import * as firebase from 'firebase/app';
 
@@ -19,7 +20,7 @@ export class MyApp {
   currentUser: any; // Pour le menu
   selectedTeam: string = 'rcbseniors';
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, keyboard: Keyboard,
     public appCtrl: App, public menuCtrl: MenuController,
     private peopleService: PeopleService) {
 
@@ -27,6 +28,7 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       // splashScreen.hide();
+      keyboard.disableScroll(true);
 
       // Par défaut le menu est désactivé
       this.menuCtrl.enable(false);

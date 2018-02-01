@@ -29,7 +29,7 @@ export class GettingStartedPage {
 
   ionViewWillLoad() {
     // On bloque le swipe sur le slide
-    this.slides.lockSwipeToNext(true);
+    this.slides.lockSwipes(true);
 
     // Initialise le People
     this.user.userKey = this.navParams.get('userKey');  // Lie User et People

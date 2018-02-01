@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import { MyApp } from './app.component';
 
@@ -33,7 +34,7 @@ import { SupporterPageModule } from '../pages/supporter/supporter.module';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, { scrollAssist: false, autoFocusAssist: false }),
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
@@ -52,6 +53,7 @@ import { SupporterPageModule } from '../pages/supporter/supporter.module';
   providers: [
     StatusBar,
     SplashScreen,
+    Keyboard,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalVarService,
     ToastService,
