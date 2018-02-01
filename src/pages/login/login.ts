@@ -17,10 +17,17 @@ export class LoginPage {
 
   private userEmail: string = "";
   private userPassword: string = "";
+  private loading: boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, 
     public afAuth: AngularFireAuth, public modalCtrl: ModalController,
-    public toastService: ToastService) { }
+    public toastService: ToastService) {
+     }
+
+  ionViewDidLoad() {
+    // Timeout avant de masquer le loader
+    setTimeout(() => this.loading = false, 3100)
+  }
 
   // Créer un utilisateur Firebase
   createUser() {

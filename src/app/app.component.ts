@@ -26,7 +26,7 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      splashScreen.hide();
+      // splashScreen.hide();
 
       // Par défaut le menu est désactivé
       this.menuCtrl.enable(false);

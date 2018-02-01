@@ -1,8 +1,16 @@
 
-<ion-content pager>
+<ion-content>
   
-  <!-- <img src="assets/imgs/slogan.png" /> -->
-  
+  <div id="loading-overlay" [style.display]="loading ? 'flex': 'none'">
+    <div class="flb">
+      <div class="aligner-item aligner-item--top"></div>
+      <img src="assets/imgs/splash.svg">
+      <div class="aligner-item aligner-item--bottom"></div>
+    </div>
+  </div>
+
+  <img id="logo" src="assets/imgs/logo.png" width="40%" />
+
   <!-- Formulaire de connexion par mail -->
   <ion-list>
     <ion-item>

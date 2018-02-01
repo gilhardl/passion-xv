@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 
 import { People } from '../../models/people/people.model';
-import { PeopleType } from '../../models/people/people-type.enum';
+// import { PeopleType } from '../../models/people/people-type.enum';
 import { PeopleService } from '../../services/people/people.service';
 import { ToastService } from '../../services/toast/toast.service';
 

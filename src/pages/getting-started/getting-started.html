@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-buttons right>
+    <ion-buttons right *ngIf="isNextSlide">
       <button ion-button color="primary" (click)="nextSlide()">CONTINUER</button>
     </ion-buttons>
     <ion-title color="dark">
@@ -61,9 +61,7 @@
 
     <!-- SLIDE 2 -->
     <ion-slide>
-      <h1>Votre équipe</h1>
-      <h4>Bientôt dispo...</h4>
-      <button ion-button clear (click)="nextSlide()">Continuer</button>
+      <ion-searchbar (ionInput)="searchInput"></ion-searchbar>
     </ion-slide>
     <!-- FIN SLIDE 2 -->
     

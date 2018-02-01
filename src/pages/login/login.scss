@@ -1,9 +1,11 @@
 page-login {
     
     ion-content {
-        // background-image: url('../assets/imgs/lockscreen.jpg');
-        // background-position: 50%;
         text-align: center;
+    }
+
+    #logo {
+        margin-top: 40px;
     }
 
     .logInBtn {
@@ -33,4 +35,48 @@ page-login {
         background: transparent;
         border: none;
     }
+
+    #loading-overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100000;
+        width:100%;
+        background-color: color($colors, primary);
+      }
+      
+      .flb {
+        background-color: color($colors, primary);
+        height:100%;
+        width:100%;
+        animation: pulse 1s linear forwards;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      @keyframes pulse {
+        0% {
+          opacity:0;
+        }
+        100% {
+          opacity:1;
+        }
+      }
+      .aligner-item {
+        max-width: 50%;
+      }
+      .aligner-item--top {
+        align-self: flex-start;
+      }
+      .aligner-item--bottom {
+        align-self: flex-end;
+      }
+      #loading-overlay img {
+        display: block;
+        margin: 0 auto;
+        width: 50%;
+        height: auto;
+      }
 }

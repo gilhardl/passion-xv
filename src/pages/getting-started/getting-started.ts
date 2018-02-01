@@ -18,6 +18,7 @@ export class GettingStartedPage {
 
   user: People;
   pageTitle: string = 'Infos perso';
+  isNextSlide: boolean = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public menuCtrl: MenuController, private peopleService: PeopleService) {
@@ -28,7 +29,7 @@ export class GettingStartedPage {
 
   ionViewWillLoad() {
     // On bloque le swipe sur le slide
-    this.slides.lockSwipes(true);
+    this.slides.lockSwipeToNext(true);
 
     // Initialise le People
     this.user.userKey = this.navParams.get('userKey');  // Lie User et People
@@ -61,6 +62,19 @@ export class GettingStartedPage {
     this.slides.lockSwipes(false);
     this.slides.slideNext();
     this.slides.lockSwipes(true);
+    // Change le titre de la page en fonction de la slide
+    switch(this.slides.getActiveIndex()){
+      case 0:
+        this.pageTitle = 'Infos perso';
+        break;
+      case 1:
+        this.pageTitle = 'Votre équipe';
+        break;
+      case 2:
+        this.pageTitle = '';
+        this.isNextSlide = false;
+        break;
+    }
   }
 
 }
