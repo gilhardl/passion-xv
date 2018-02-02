@@ -101,8 +101,6 @@
         <variable name="ANDROID_PATHPREFIX" value="/" />
     </plugin>
     <plugin name="cordova-plugin-statusbar" spec="^2.3.0" />
-    <preference name="SplashScreen" value="screen" />
-    <preference name="SplashShowOnlyFirstTime" value="false" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <engine name="android" spec="~6.3.0" />
 </widget>
