@@ -11,6 +11,6 @@ import { GettingStartedPage } from './getting-started';
     IonicPageModule.forChild(GettingStartedPage)
   ],
   entryComponents: [
-  ]
+  ],
 })
 export class GettingStartedPageModule {}

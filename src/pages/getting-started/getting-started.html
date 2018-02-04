@@ -1,13 +1,8 @@
-<!--
-  Generated template for the GettingStartedPage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
-    <ion-buttons right *ngIf="isNextSlide">
+  <ion-navbar *ngIf="isNextSlide">
+    <ion-buttons right>
       <button ion-button color="primary" (click)="nextSlide()">CONTINUER</button>
     </ion-buttons>
     <ion-title color="dark">
@@ -19,7 +14,7 @@
 
 
 <ion-content padding>
-  <ion-slides pager>
+  <ion-slides>
 
     <!-- SLIDE 1 -->
     <ion-slide>
@@ -61,7 +56,17 @@
 
     <!-- SLIDE 2 -->
     <ion-slide>
-      <ion-searchbar (ionInput)="searchInput"></ion-searchbar>
+        <ion-searchbar (ionInput)="updateSearchTerms($event.target.value)" type="search" placeholder="Rechercher une équipe..."></ion-searchbar>
+
+        <ion-list>
+          <ion-item *ngFor="let team of searchedTeamList$ | async">
+            {{ team.name }}
+          </ion-item>
+        </ion-list>
+
+        <ion-footer>
+            <button ion-button clear (click)="addTeam()">Vous ne trouvez pas votre équipe ?</button>
+        </ion-footer>
     </ion-slide>
     <!-- FIN SLIDE 2 -->
     
@@ -73,3 +78,4 @@
     <!-- FIN SLIDE 3 -->
   </ion-slides>
 </ion-content>
+
