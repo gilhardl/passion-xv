@@ -1,6 +1,7 @@
 
 import { Injectable } from "@angular/core";
 import { AngularFireDatabase } from "angularfire2/database";
+import { Observable } from 'rxjs/Observable';
 
 import { People } from '../../models/people/people.model';
 import { PeopleType } from "../../models/people/people-type.enum";
@@ -13,8 +14,17 @@ export class PeopleService {
 
     constructor(private db: AngularFireDatabase) { }
 
-    getAll() {
-        return this.peopleRef;
+    getAll(): Observable<People[]> {
+        return this.peopleRef
+            .snapshotChanges()
+            .map(
+            changes => {
+                return changes.map(c => ({
+                key: c.payload.key,
+                ...c.payload.val()
+                }));
+            }
+            );;
     }
 
     get(key: string) {
