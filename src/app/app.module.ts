@@ -25,7 +25,7 @@ import { TabsModule } from '../pages/tabs/tabs.module';
 import { LoginPageModule } from '../pages/login/login.module';
 import { GettingStartedPageModule } from '../pages/getting-started/getting-started.module'
 import { SchedulePageModule } from '../pages/schedule/schedule.module';
-import { TeamPageModule } from '../pages/team/team.module';
+import { SquadPageModule } from '../pages/squad/squad.module';
 import { TeamPlayerPageModule } from '../pages/team-player/team-player.module';
 import { SupporterPageModule } from '../pages/supporter/supporter.module';
 
@@ -43,7 +43,7 @@ import { SupporterPageModule } from '../pages/supporter/supporter.module';
     LoginPageModule,
     TabsModule,
     SchedulePageModule,
-    TeamPageModule,
+    SquadPageModule,
     TeamPlayerPageModule,
     SupporterPageModule
   ],

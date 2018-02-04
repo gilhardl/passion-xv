@@ -10,7 +10,7 @@ import { IonicPage } from 'ionic-angular';
 export class TabsPage {
 
   tab1Root = 'page-schedule';
-  tab2Root = 'page-team';
+  tab2Root = 'page-squad';
   tab3Root = 'page-supporter';
 
   constructor() { }

@@ -9,13 +9,13 @@ import { PeopleService } from '../../services/people/people.service';
 import { ToastService } from '../../services/toast/toast.service';
 
 @IonicPage({
-  name: 'page-team'
+  name: 'page-squad'
 })
 @Component({
-  selector: 'page-team',
-  templateUrl: 'team.html'
+  selector: 'page-squad',
+  templateUrl: 'squad.html'
 })
-export class TeamPage {
+export class SquadPage {
 
   playerList$: Observable<People[]>;
 
