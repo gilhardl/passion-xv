@@ -26,7 +26,7 @@ export class LoginPage {
 
   ionViewDidLoad() {
     // Timeout avant de masquer le loader
-    setTimeout(() => this.loading = false, 3100)
+    setTimeout(() => this.loading = false, 4100)
   }
 
   // Créer un utilisateur Firebase
@@ -94,19 +94,20 @@ export class LoginPage {
         console.log(token);
         console.log(user);
       })
-      .catch( error => {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-        console.log(errorCode);
-        console.log(errorMessage);
-        console.log(email);
-        console.log(credential);
+      .catch( (error) => {
+        // Si il y a une erreur on affiche un toast
+        switch(error.code) {
+          case 'auth/invalid-email':
+            this.toastService.show("Adresse mail incorrect");
+          case 'auth/user-disabled':
+            this.toastService.show("Votre compte a été désactivé");
+          case 'auth/user-not-found':
+            this.toastService.show("Utilisateur inconnu");
+          case 'auth/wrong-password':
+            this.toastService.show("Mot de passe incorrect");
+          case undefined:
+          this.toastService.show(error.message);
+        }
       });
   }
 

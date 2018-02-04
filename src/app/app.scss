@@ -15,16 +15,8 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
-html {
+html, body {
     background-color: color($colors, primary);  // Pour la légère apparition après le splashscreen
-}
-
-body {
-    background-color: color($colors, secondary);  // Pour la légère apparition après le splashscreen
-}
-
-ion-app {
-    background-color: color($colors, danger);
 }
 
 .app-menu ion-header {

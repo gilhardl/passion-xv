@@ -1,37 +1,18 @@
-page-login {
-    
+page-login {    
+
     ion-content {
         text-align: center;
     }
 
     #logo {
-        margin-top: 40px;
+        margin: 2em 0;
     }
 
-    .logInBtn {
-        margin: 1.5em 0;
-    }
-
-    .signUpBtn {
-        position: absolute;
-        bottom: 1em;
-        left: 5%;
-        width: 90%;
-    }
-
-    .card-md {
-        background-color: transparentize($color: #ffffff, $amount: 0.3);
-    }
-    
-    .card-ios {
+    .card-md, .card-ios {
         background-color: transparentize($color: #ffffff, $amount: 0.3);
     }
 
-    .item-md {
-        background: transparent;
-        border: none;
-    }
-    .item-ios {
+    .item-md, .item-ios {
         background: transparent;
         border: none;
     }
