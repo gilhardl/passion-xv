@@ -16,12 +16,12 @@ export interface Team {
     stadium?: Stadium;
 }
 
-enum GenderType {
+export enum GenderType {
     male = 'Masculin',
     female = 'Féminin'
 }
 
-enum TeamCategory {
+export enum TeamCategory {
     U5 = 'U5',
     U6 = 'U6',
     U7 = 'U7',

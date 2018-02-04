@@ -18,6 +18,7 @@ import { GlobalVarService } from '../services/global-var/global-var.service';
 import { ToastService } from '../services/toast/toast.service';
 
 import { PeopleService } from '../services/people/people.service';
+import { TeamService } from '../services/team/team.service';
 
 // MODULES DE PAGES
 import { TabsModule } from '../pages/tabs/tabs.module';
@@ -57,7 +58,8 @@ import { SupporterPageModule } from '../pages/supporter/supporter.module';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalVarService,
     ToastService,
-    PeopleService
+    PeopleService,
+    TeamService
   ]
 })
 export class AppModule { }
