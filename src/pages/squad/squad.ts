@@ -27,6 +27,6 @@ export class SquadPage {
   }
 
   addPlayer() {
-    this.navCtrl.push('page-team-player');
+    this.navCtrl.push('page-squad-player');
   }
 }

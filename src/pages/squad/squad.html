@@ -12,7 +12,7 @@
 <ion-content padding>
   <ion-list>
     <ion-item-sliding>
-      <ion-item *ngFor="let player of playerList$ | async" navPush="page-team-player" [navParams]="{player: player}">
+      <ion-item *ngFor="let player of playerList$ | async" navPush="page-squad-player" [navParams]="{player: player}">
         {{ player.firstname }} {{ player.lastname }}
       </ion-item>
       <ion-item-options side="right">

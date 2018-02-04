@@ -7,13 +7,13 @@ import { People } from '../../models/people/people.model';
 // import { PeopleType } from '../../models/people/people-type.enum';
 
 @IonicPage({
-  name: 'page-team-player'
+  name: 'page-squad-player'
 })
 @Component({
-  selector: 'page-team-player',
-  templateUrl: 'team-player.html',
+  selector: 'page-squad-player',
+  templateUrl: 'squad-player.html',
 })
-export class TeamPlayerPage {
+export class SquadPlayerPage {
 
   private player: People;
   private newPlayer: boolean = false;
@@ -27,6 +27,7 @@ export class TeamPlayerPage {
     
     if (this.player == undefined) {
       this.player = this.peopleService.getBlank();
+      this.newPlayer = true;
     }
   }
 

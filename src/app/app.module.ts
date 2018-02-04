@@ -26,7 +26,7 @@ import { LoginPageModule } from '../pages/login/login.module';
 import { GettingStartedPageModule } from '../pages/getting-started/getting-started.module'
 import { SchedulePageModule } from '../pages/schedule/schedule.module';
 import { SquadPageModule } from '../pages/squad/squad.module';
-import { TeamPlayerPageModule } from '../pages/team-player/team-player.module';
+import { SquadPlayerPageModule } from '../pages/squad-player/squad-player.module';
 import { SupporterPageModule } from '../pages/supporter/supporter.module';
 
 @NgModule({
@@ -44,7 +44,7 @@ import { SupporterPageModule } from '../pages/supporter/supporter.module';
     TabsModule,
     SchedulePageModule,
     SquadPageModule,
-    TeamPlayerPageModule,
+    SquadPlayerPageModule,
     SupporterPageModule
   ],
   bootstrap: [IonicApp],
