@@ -23,16 +23,7 @@ export class TeamPage {
     public toastService: ToastService, public peopleService: PeopleService) { }
 
   ionViewDidLoad() {
-    this.playerList$ = this.peopleService.getAll()
-      .snapshotChanges()
-      .map(
-        changes => {
-          return changes.map(c => ({
-            key: c.payload.key,
-            ...c.payload.val()
-          }));
-        }
-      );
+    this.playerList$ = this.peopleService.getAll();
   }
 
   addPlayer() {
