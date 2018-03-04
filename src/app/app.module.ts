@@ -53,7 +53,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
     IonicModule.forRoot(MyApp, { scrollAssist: false, autoFocusAssist: false, preloadModules: true }),  // scrollAssits & autoFocusAssis for Keyboard push up - preloadModules for lazy-loading
     AngularFireModule.initializeApp(FIREBASE_CONFIG),
     AngularFireDatabaseModule,  // A supprimer
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     ReactiveFormsModule,
     FormsModule,

@@ -7,6 +7,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 
 import * as firebase from 'firebase/app';
 
+import { ToastProvider } from '../providers/toast/toast.provider';
 import { PeopleProvider } from '../providers/people/people.provider';
 
 @Component({
@@ -18,9 +19,9 @@ export class MyApp {
   
   currentUser: any; // Pour le menu
   selectedTeam: string = 'rcbseniors';
-
+  
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, keyboard: Keyboard,
-    public appCtrl: App, public menuCtrl: MenuController, private peopleProvider: PeopleProvider) {
+    public appCtrl: App, public menuCtrl: MenuController, private toastProvider: ToastProvider, private peopleProvider: PeopleProvider) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -31,6 +32,7 @@ export class MyApp {
       // Par défaut le menu est désactivé
       this.menuCtrl.enable(false);
       this.menuCtrl.swipeEnable(false);
+
 
       // Intercepte la connexion d'un utilisateur
       firebase.auth().onAuthStateChanged(user => {
