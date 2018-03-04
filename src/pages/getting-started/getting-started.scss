@@ -1,3 +1,9 @@
 page-getting-started {
-  
+    ion-slide.swiper-slide {
+        align-items: flex-start;
+    }
+
+    .registration-waiting ion-note {
+        font-size: 1rem;
+    }
 }

@@ -7,18 +7,29 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import "rxjs/add/operator/switchMap";
 import "rxjs/add/observable/zip";
 
-import { Team, GenderType, TeamCategory } from '../../models/team/team.model';
+import { GenderType, People } from '../../models/people/people.model';
+import { Squad, SquadCategory } from '../../models/team/team.model';
 
 @Injectable()
-export class TeamService {
+export class SquadProvider {
 
     // Liste des équipes dans Firebase
-    private teamsRef: AngularFireList<Team> = this.db.list<Team>('teams');
+    private squadRef: AngularFireList<Squad> = this.db.list<Squad>('squads');
 
     constructor(private db: AngularFireDatabase) { }
 
-    getAll(): Observable<Team[]> {
-        return this.teamsRef
+    create(): Squad{
+        return {
+            name: '',
+            gender: GenderType.male,
+            category: SquadCategory.UP18,
+            coachsId: new Array<string>(),
+            playersId: new Array<string>()
+        };
+    }
+
+    getAll(): Observable<Squad[]> {
+        return this.squadRef
             .snapshotChanges()
             .map(
             changes => {
@@ -31,39 +42,28 @@ export class TeamService {
     }
 
     get(key: string) {
-        return this.teamsRef.query
+        return this.squadRef.query
             .once(key)
             .then(snapchot => {
                 console.log(snapchot);
             })
     }
 
-    getBlank() {
-        return {
-            name: '',
-            gender: GenderType.male,
-            category: TeamCategory.UP18,
-            coachs: [],
-            players: [],
-            supporters: []
-        }
+    add(squad: Squad) {
+        return this.squadRef.push(squad);
     }
 
-    add(team: Team) {
-        return this.teamsRef.push(team);
+    update(squad: Squad) {
+        return this.squadRef.update(squad.name, squad);
     }
 
-    update(team: Team) {
-        return this.teamsRef.update(team.key, team);
+    remove(squad: Squad) {
+        return this.squadRef.remove(squad.name);
     }
 
-    remove(team: Team) {
-        return this.teamsRef.remove(team.key);
-    }
-
-    search( start: BehaviorSubject<string>, end: BehaviorSubject<string>): Observable<Team[]> {
+    search( start: BehaviorSubject<string>, end: BehaviorSubject<string>): Observable<Squad[]> {
         return Observable.zip(start, end).switchMap( param => {
-            return this.db.list("/teams", ref =>
+            return this.db.list("/squads", ref =>
                 ref.orderByChild("name")
                     .limitToFirst(10)
                     .startAt(param[0])

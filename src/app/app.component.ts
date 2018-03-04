@@ -7,8 +7,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 
 import * as firebase from 'firebase/app';
 
-import { PeopleService } from '../services/people/people.service';
-import { People } from '../models/people/people.model';
+import { PeopleProvider } from '../providers/people/people.provider';
 
 @Component({
   templateUrl: 'app.html'
@@ -22,7 +21,7 @@ export class MyApp {
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, keyboard: Keyboard,
     public appCtrl: App, public menuCtrl: MenuController,
-    private peopleService: PeopleService) {
+    private peopleService: PeopleProvider) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -42,21 +41,26 @@ export class MyApp {
         if (user) {
           this.currentUser = user;   
 
-          // On vérifie s'il existe un People en BDD avec l'userKey de l'utilisateur connecté
-          this.peopleService.getByUserKey(user.uid)
-            .then( snapchot => {
-              if(snapchot.val() == undefined) {
-                // Nouvel utilisateur
-                this.appCtrl.getActiveNavs()[0].setRoot('page-getting-started', {userKey: user.uid, displayName: user.displayName, email: user.email});  // Affiche le Get started
-              } else {
-                // Utilisateur existant
-                if (currentView == 'LoginPage'){
-                  this.menuCtrl.enable(true); // Active le menu
-                  this.menuCtrl.swipeEnable(true); // Permet le swipe sur le menu
-                  this.appCtrl.getActiveNavs()[0].setRoot('page-tabs'); // Affiche l'accueil
-                }
-              }
-            });
+          
+          /// POUR TESTS
+          this.appCtrl.getActiveNavs()[0].setRoot('page-getting-started', {userUid: user.uid, displayName: user.displayName, email: user.email});  // Affiche le Get started
+          //// FIN POUR TESTS (ce qui suit est à réactiver une fois les tests finis)
+          
+          // // On vérifie s'il existe un People en BDD avec l'userKey de l'utilisateur connecté
+          // this.peopleService.getByUserUid(user.uid)
+          //   .then( snapchot => {
+          //     if(snapchot.val() == undefined) {
+          //       // Nouvel utilisateur
+          //       this.appCtrl.getActiveNavs()[0].setRoot('page-getting-started', {userUid: user.uid, displayName: user.displayName, email: user.email});  // Affiche le Get started
+          //     } else {
+          //       // Utilisateur existant
+          //       if (currentView == 'LoginPage'){
+          //         this.menuCtrl.enable(true); // Active le menu
+          //         this.menuCtrl.swipeEnable(true); // Permet le swipe sur le menu
+          //         this.appCtrl.getActiveNavs()[0].setRoot('page-tabs'); // Affiche l'accueil
+          //       }
+          //     }
+          //   });
 
           // Utilisateur déconnecté
         } else {

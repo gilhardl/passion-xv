@@ -4,9 +4,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 
 import { People } from '../../models/people/people.model';
-// import { PeopleType } from '../../models/people/people-type.enum';
-import { PeopleService } from '../../services/people/people.service';
-import { ToastService } from '../../services/toast/toast.service';
+import { PeopleProvider } from '../../providers/people/people.provider';
+import { ToastProvider } from '../../providers/toast/toast.provider';
+import { Subscription } from 'rxjs/Subscription';
 
 @IonicPage({
   name: 'page-squad'
@@ -17,16 +17,19 @@ import { ToastService } from '../../services/toast/toast.service';
 })
 export class SquadPage {
 
-  playerList$: Observable<People[]>;
+  playerList$: Subscription;
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, 
-    public toastService: ToastService, public peopleService: PeopleService) { }
+    public toastService: ToastProvider, public peopleProvider: PeopleProvider) { }
 
   ionViewDidLoad() {
-    this.playerList$ = this.peopleService.getAll();
+    this.playerList$ = this.peopleProvider.getAll().subscribe();
   }
 
   addPlayer() {
     this.navCtrl.push('page-squad-player');
+  }
+
+  ionViewWillUnload() {
   }
 }

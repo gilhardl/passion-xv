@@ -10,27 +10,28 @@
   </div>
 
   <img id="logo" src="assets/imgs/logo.png" width="40%" />
+  <h6 ion-text color="primary">Bienvenu(e) sur Passion XV</h6>
 
   <!-- Formulaire de connexion par mail -->
-  <ion-list>
+  <ion-list no-lines>
     <ion-item>
-      <ion-label floating color="dark">Adresse email</ion-label>
+      <ion-label color="dark">Email</ion-label>
       <ion-input type="email" [(ngModel)]="userEmail"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label floating color="dark">Mot de passe</ion-label>
+      <ion-label color="dark">Mot de passe</ion-label>
       <ion-input type="password" [(ngModel)]="userPassword"></ion-input>
     </ion-item>
   </ion-list>
 
   <!-- Bouton CONNEXION -->
-  <button class="logInBtn" (click)="logIn()" ion-button color="light" >Connexion</button>
+  <button id="logInBtn" (click)="logIn()" ion-button color="secondary">Connexion</button>
 
   <!-- Connexion avec les réseaux sociaux -->
   <ion-card>
     <ion-grid>
       
-      <h2>Connexion avec ...</h2>
+      <h2 ion-text color="dark">Connexion avec...</h2>
       
       <ion-row>
         <ion-col>

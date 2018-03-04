@@ -1,6 +1,6 @@
 
 export interface Stadium {
-    key?: string;
+    id?: string;
     name: string;
     place: string;
 }

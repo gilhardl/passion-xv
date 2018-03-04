@@ -1,0 +1,16 @@
+
+<ion-header>
+    <ion-navbar>
+        <ion-title>Sélectionnez une couleur</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+
+    <canvas #palette style="background:white;" class='center'></canvas>
+    <canvas #chooser style="background:white; margin-top: 20px; margin-bottom: 20px; " class='center'></canvas>
+
+</ion-content>
+
+<ion-footer>
+    <button ion-button full clear (click)="sumbitColor()">Valider</button>
+</ion-footer>

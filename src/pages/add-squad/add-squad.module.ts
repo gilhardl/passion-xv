@@ -1,18 +1,17 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 
-import { GettingStartedPage } from './getting-started';
+import { AddSquadPage } from './add-squad';
+import { SquadProvider } from '../../providers/squad/squad.provider';
 import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   declarations: [
-    GettingStartedPage,
+    AddSquadPage,
   ],
   imports: [
-    IonicPageModule.forChild(GettingStartedPage),
+    IonicPageModule.forChild(AddSquadPage),
     PipesModule
   ],
-  entryComponents: [
-  ],
 })
-export class GettingStartedPageModule {}
+export class AddSquadPageModule {}

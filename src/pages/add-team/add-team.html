@@ -1,0 +1,44 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Nouveau club</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding *ngIf="team">
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Nom du club</ion-label>
+      <ion-input [(ngModel)]="team.name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Slogan</ion-label>
+      <ion-input [(ngModel)]="team.slogan"></ion-input>
+    </ion-item>
+    
+    <ion-card>
+      <ion-card-header color="primary">Nos couleurs</ion-card-header>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h3>Primaire</h3>
+            <button #primaryColorBtn ion-button (click)="selectColor('primary')"></button>
+          </ion-col>
+          <ion-col>
+            <h3>Secondaire</h3>
+            <button #secondaryColorBtn  ion-button (click)="selectColor('secondary')"></button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    
+    <ion-item>
+      <ion-label floating>Stade</ion-label>
+      <ion-input [(ngModel)]="team.stadium.name"></ion-input>
+    </ion-item>
+  </ion-list>
+  
+  <button ion-button (click)="submitNewTeam()">Valider</button>
+</ion-content>

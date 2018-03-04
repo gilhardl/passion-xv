@@ -1,10 +1,7 @@
 
 <ion-header>
 
-  <ion-navbar *ngIf="isNextSlide">
-    <ion-buttons right>
-      <button ion-button color="primary" (click)="nextSlide()">CONTINUER</button>
-    </ion-buttons>
+  <ion-navbar [hidden]="!isNextSlide">
     <ion-title color="dark">
       {{ pageTitle }}
     </ion-title>
@@ -14,9 +11,9 @@
 
 
 <ion-content padding>
-  <ion-slides>
+  <ion-slides (ionSlideDidChange)="slideChanged()" pager>
 
-    <!-- SLIDE 1 -->
+    <!--  SLIDE 0  -  UTILISATEUR  -->
     <ion-slide>
       <!-- Nom et Prénom -->
       <ion-list>
@@ -33,47 +30,71 @@
       <!-- Type d'utilisateur -->
       <ion-list radio-group [(ngModel)]="user.type">
         <ion-list-header>Vous êtes...</ion-list-header>
-        
-        <ion-item>
-          <ion-label>Joueur</ion-label>
-          <ion-radio value="player"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label>Entraineur</ion-label>
-          <ion-radio value="coach"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label>Entraineur / Joueur</ion-label>
-          <ion-radio value="coachplayer"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label>Supporter</ion-label>
-          <ion-radio value="supporter"></ion-radio>
+        <ion-item *ngFor="let type of peopleTypeValues">
+          <ion-label>{{ type | enumToString:peopleTypeEnum }}</ion-label>
+          <ion-radio [checked]="user.type==type" [value]="type" ngDefaultControl></ion-radio> <!-- ngDefaultControl : Permet de fixer l'erreur "No value accessor for form control" -->
         </ion-item>
       </ion-list>
+
+      <ion-footer style="padding-bottom: 1rem;">
+        <button ion-button full clear color="primary" (click)="slides.slideNext()">SUIVANT</button>
+      </ion-footer>
+    </ion-slide>
+    <!-- FIN SLIDE 0 -->
+
+    <!--  SLIDE 1  -  CLUB  -->  
+    <ion-slide>
+      <ion-searchbar (ionInput)="updateSearchTerms($event.target.value)" type="search" placeholder="Rechercher un club..."></ion-searchbar>
+      <ion-list>
+        <ion-item [hidden]="selectedTeam || serchedTeamNumber$ > 0"><p style="white-space: normal;">Vous devez choisir un club avant de continuer...</p></ion-item>
+        <ion-item [hidden]="!selectedTeam">
+            <ion-label>{{ selectedTeam?.name }}</ion-label>
+            <ion-radio item-end checked="true" (click)="deselectTeam()"></ion-radio>
+          </ion-item>
+        <ion-item *ngFor="let team of searchedTeamList$ | async" (click)="selectExistingTeam(team)" [hidden]="team.id == selectedTeam?.id">
+          {{ team.name }}
+        </ion-item>
+      </ion-list>
+
+      <ion-footer style="padding-bottom: 1rem;">
+        <button ion-button full clear (click)="addNewTeam()">Ajouter un club</button>
+        <button ion-button full clear (click)="slides.slideNext()" [hidden]="!selectedTeam">SUIVANT</button>
+      </ion-footer>
     </ion-slide>
     <!-- FIN SLIDE 1 -->
 
-    <!-- SLIDE 2 -->
-    <ion-slide>
-        <ion-searchbar (ionInput)="updateSearchTerms($event.target.value)" type="search" placeholder="Rechercher une équipe..."></ion-searchbar>
-
+    <!--  SLIDE 2  -  EQUIPE  -->  
+    <ion-slide *ngIf="user.type != peopleTypeEnum.supporter">
         <ion-list>
-          <ion-item *ngFor="let team of searchedTeamList$ | async">
-            {{ team.name }}
+          <ion-item [hidden]="selectedSquad || selectedTeamSquadsNumber$ > 0"><p style="white-space: normal;">Vous devez choisir un équipe avant de continuer...</p></ion-item>
+          <ion-item [hidden]="!selectedSquad">
+            <ion-label>{{ selectedSquad?.name }}</ion-label>
+            <ion-radio item-end checked="true" (click)="deselectSquad()"></ion-radio>
+          </ion-item>
+          <ion-item *ngFor="let squad of selectedTeamSquads$ | async" (click)="selectExistingSquad(squad)" [hidden]="squad.id == selectedSquad?.id">
+            {{ squad.name }}
           </ion-item>
         </ion-list>
 
-        <ion-footer>
-            <button ion-button clear (click)="addTeam()">Vous ne trouvez pas votre équipe ?</button>
+        <ion-footer style="padding-bottom: 2rem;">
+          <button ion-button clear (click)="addNewSquad()">Ajouter une équipe</button>
+          <button ion-button full clear color="primary" (click)="slides.slideNext()" [hidden]="!selectedSquad">SUIVANT</button>
         </ion-footer>
     </ion-slide>
     <!-- FIN SLIDE 2 -->
     
+
+
     <!-- SLIDE 3 -->
-    <ion-slide>
-      <h2 color="dark">Bienvenu sur Passion XV</h2>
-      <button ion-button clear (click)="goHome()">C'est parti !</button>
+    <ion-slide style="align-items: center;">
+      <div [hidden]="!registrationSubmited">
+        <h2 color="dark">Bienvenu sur Passion XV</h2>
+        <button ion-button clear (click)="goHome()">C'est parti !</button>
+      </div>
+      <div class="registration-waiting" [hidden]="registrationSubmited">
+        <ion-note ion-text color="dark">Petites foulées jusqu'au premier poteau puis on allonge pour finaliser votre inscription</ion-note>
+        <p><ion-spinner name="circles" color="primary"></ion-spinner></p>
+      </div>
     </ion-slide>
     <!-- FIN SLIDE 3 -->
   </ion-slides>

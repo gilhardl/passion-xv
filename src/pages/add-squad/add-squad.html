@@ -1,0 +1,32 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Nouvelle équipe</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Nom de l'équipe</ion-label>
+      <ion-input [(ngModel)]="squad.name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Genre</ion-label>
+      <ion-select [(ngModel)]="squad.gender">
+        <ion-option *ngFor="let gender of genderTypeValues" [value]="gender" ngDefaultControl>{{ gender | enumToString:genderTypeEnum }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Catégorie</ion-label>
+      <ion-select [(ngModel)]="squad.category">
+        <ion-option *ngFor="let category of squadCategoryValues" [value]="category" ngDefaultControl>{{ category | enumToString:squadCategoryEnum }}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <button ion-button (click)="submitNewSquad()">Valider</button>
+</ion-content>
