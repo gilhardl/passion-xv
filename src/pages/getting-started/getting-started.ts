@@ -1,21 +1,17 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController, Slides, AlertController } from 'ionic-angular';
-// Firestore
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { firestore } from 'firebase/app';
-import { DocumentReference } from '@firebase/firestore-types'
 // Imports pour la recherche
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/count';
 
 // import { UtilsProvider } from '../../providers/utils/utils.provider';
-import { People, PeopleType, GenderType} from '../../models/people/people.model';
+import { People, PeopleType} from '../../models/people/people.model';
 import { PeopleProvider } from '../../providers/people/people.provider';
 import { Team, Squad } from '../../models/team/team.model';
+import { SquadProvider } from '../../providers/squad/squad.provider';
 import { TeamProvider } from '../../providers/team/team.provider';
 import { UtilsProvider } from '../../providers/utils/utils.provider';
-import { FirebaseApp } from 'angularfire2';
 
 @IonicPage({
   name: 'page-getting-started'
@@ -61,29 +57,20 @@ export class GettingStartedPage {
   
   // CONSTRUCTEUR
   constructor(public navCtrl: NavController, public navParams: NavParams, public menuCtrl: MenuController,
-    private alertCtrl: AlertController, private utilsProvider: UtilsProvider, private db: AngularFirestore,
-    private peopleProvider: PeopleProvider, private teamProvider: TeamProvider) {
+    private alertCtrl: AlertController, private utilsProvider: UtilsProvider, 
+    private peopleProvider: PeopleProvider, private teamProvider: TeamProvider, private squadProvider: SquadProvider) {
     
-    this.user = {
-      lastname: '',
-      firstname: '',
-      type: PeopleType.player,
-    };
-    // Initioalisation des PeopleType
+    // Initilise l'Utilisateur
+    this.user = this.peopleProvider.create();
+    // Initialisation des PeopleType
     this.peopleTypeValues = this.utilsProvider.getEnumValues(PeopleType);
-  
   }
+  // FIN CONSTRUCTEUR
+  /////////////////////////////////
 
-  
-
+  /////////////////////////////////
   // INITIALISATION IHM
   ionViewWillLoad() {
-    // On bloque le swipe sur le slide
-    if (this.slides.getActiveIndex() == 1 && !this.selectedTeam) {
-      this.slides.lockSwipes(true);
-    } else {
-      this.slides.lockSwipes(false);
-    }
 
     // (SLIDE 1) Initialise le People
     this.user.userUid = this.navParams.get('userUid');  // Lie User et People
@@ -106,13 +93,7 @@ export class GettingStartedPage {
     }
 
     // (SLIDE 2) Initilise la liste des équipes recherchées
-    this.searchedTeamList$ = this.db.collection<Team>('teams').snapshotChanges().map(actions => {
-      return actions.map(action => {
-        const data = action.payload.doc.data() as Team;
-        const id = action.payload.doc.id;
-        return { id, ...data };
-      });
-    });
+    this.searchedTeamList$ = this.teamProvider.search(this.searchTeamStartAt, this.searchTeamEndAt);
     this.searchedTeamNumber$ = this.searchedTeamList$.count();
 
     // (SLIDE 3) Initialise les équipes
@@ -121,26 +102,13 @@ export class GettingStartedPage {
   // FIN INITIALISATION IHM
   /////////////////////////////////
 
-
-
-  // Méthode de mise à jour les Subject de recherche
-  updateSearchTerms(terms: string) {
-    // Met à jour l'objet Subject
-    this.searchTeamStartAt.next(terms);
-    this.searchTeamEndAt.next(terms+'\uf8ff');
-  }
-
-
   /////////////////////////////////
   // NAVIGATION
-  /////////////////////////////////
+  // Gestion du chagement de slide
   slideChanged(){
     let realActiveSlideIndex: number = this.slides.getActiveIndex();
     // Si l'utilisateur est un supporter et qu'on est après la slide du club, on modifie l'index (car la slide 2 disparait)
-    if (this.user.type == PeopleType.supporter && realActiveSlideIndex == 2) {
-      realActiveSlideIndex++
-    }
-    // Change le titre de la page en fonction de la slide
+    if (this.user.type == PeopleType.supporter && realActiveSlideIndex == 2) { realActiveSlideIndex++ }
     switch(realActiveSlideIndex){
       case 0:
         this.pageTitle = 'Infos perso';
@@ -168,11 +136,27 @@ export class GettingStartedPage {
       break;
     }
   }
+
+  // Une fois l'utilisateur enregistré, on affiche sa page d'accueil (Bouton "C'est partit !")
+  goHome() {
+    this.menuCtrl.enable(true); // Active le menu
+    this.menuCtrl.swipeEnable(true);  // Active le swipe sur le menu
+    this.navCtrl.setRoot('page-tabs');  // Affiche la oage d'accueil
+  }
+  // FIN NAVIGATION
+  ///////////////////////////////////
   
 
   ///////////////////////////////////
-  //  Selection du club            //
-  ///////////////////////////////////
+  // GESTION CLUB            
+  
+  // Méthode de mise à jour les Subject de recherche de club
+  updateSearchTerms(terms: string) {
+    // Met à jour l'objet Subject
+    this.searchTeamStartAt.next(terms);
+    this.searchTeamEndAt.next(terms+'\uf8ff');
+  }
+
   selectExistingTeam(team: Team) {
 
     // Si l'utilisateur a déjà sélectionné un club qui a été crée et non enregistré
@@ -253,19 +237,14 @@ export class GettingStartedPage {
 
   }
 
+  // FIN GESTION CLUB
   ///////////////////////////////////
-  //  Selection de l'equipe        //
+
   ///////////////////////////////////
+  // GESTION EQUIPE
   updateTeamSquads() {
     if (this.selectedTeam && this.selectedTeam.id) {
-      this.selectedTeamSquads$ = this.db.collection<Team>('teams')
-        .doc(this.selectedTeam.id).collection<Squad>('squads').snapshotChanges().map(actions => {
-          return actions.map(action => {
-            const data = action.payload.doc.data() as Squad;
-            const id = action.payload.doc.id;
-            return { id, ...data };
-          });
-        });
+      this.selectedTeamSquads$ = this.squadProvider.getAllByTeam(this.selectedTeam.id);
       this.selectedTeamSquadsNumber$ = this.selectedTeamSquads$.count();
     } else {
       this.selectedTeamSquads$ = undefined;
@@ -342,146 +321,158 @@ export class GettingStartedPage {
     this.navCtrl.push('page-add-squad', {callback: addSquadCallback, teamName: this.selectedTeam.name });
   }
 
+  // FIN GESTION EQUIPE
+  ///////////////////////////////////
 
 
   ///////////////////////////////////
-  //    C'est parti !!!            //
-  ///////////////////////////////////
-  goHome() {
-
-    this.menuCtrl.enable(true); // Active le menu
-    this.menuCtrl.swipeEnable(true);  // Active le swipe sur le menu
-    this.navCtrl.setRoot('page-tabs');  // Affiche la oage d'accueil
-  }
-
+  //  GET STARTED !
+  // Premier enregistrement de l'utilisateur dans l'application
   submitRegistration() {
+
+    /////////////////////////////
+    // GESTION UTILISATEUR
     // Ajoute l'utilisateur sur Firestore (People) : /peoples
-    this.db.collection<People>('peoples').add(this.user)
-      .then(userRef => {
-
-        console.log('Utilisateur ajouté');
-        console.log(userRef)
-
-        // Ajout de l'utilisateur (People) dans le tableau qui lui correspond
+    this.peopleProvider.add(this.user)
+      // Ajout utilisateur OK
+      .then(() => {
+        let userId = this.user.userUid;
+        // Classe l'utilisateur (People) dans le tableau qui lui correspond
         switch(this.user.type) {
           case PeopleType.player:
             if (!this.selectedSquad.playersId) { this.selectedSquad.playersId = new Array<string>(); }  // On s'assure que le tableau existe
-            this.selectedSquad.playersId.push(userRef.id);
+            this.selectedSquad.playersId.push(userId);
           break;
           case PeopleType.coach:
             if (!this.selectedSquad.coachsId) { this.selectedSquad.coachsId = new Array<string>(); }  // On s'assure que le tableau existe
-            this.selectedSquad.coachsId.push(userRef.id);
+            this.selectedSquad.coachsId.push(userId);
           break;
           case PeopleType.coachplayer:
             if (!this.selectedSquad.coachsId) { this.selectedSquad.coachsId = new Array<string>(); }  // On s'assure que le tableau existe
             if (!this.selectedSquad.playersId) { this.selectedSquad.playersId = new Array<string>(); }  // On s'assure que le tableau existe
-            this.selectedSquad.coachsId.push(userRef.id);
-            this.selectedSquad.playersId.push(userRef.id);
+            this.selectedSquad.coachsId.push(userId);
+            this.selectedSquad.playersId.push(userId);
           break;
           case PeopleType.supporter:
             if (!this.selectedTeam.supportersId) { this.selectedTeam.supportersId = new Array<string>(); }  // On s'assure que le tableau existe
-            this.selectedTeam.supportersId.push(userRef.id);
+            this.selectedTeam.supportersId.push(userId);
           break;
         }
 
-        // Ajoute le club sur Firestore (Team) : /teams
+        /////////////////////////////
+        // GESTION CLUB
+        // Nouveau Club sur Firestore (Team) : /teams
         if (!this.selectedTeam.id) {
-          console.log('Club nouveau');
-          this.db.collection<Team>('teams').add(this.selectedTeam)
+          // Ajoute le Club sur firestore
+          this.teamProvider.add(this.selectedTeam)
+            // Ajout Club OK
             .then(selectedTeamRef => {
-  
-              console.log('Club ajouté');
-              console.log(selectedTeamRef);
-              
               // On n'ajoute/modifie une équipe que si l'utilisateur n'est pas un supporter, dans ce cas il a déjà été enregistré avec le club
               if (this.user.type != PeopleType.supporter) {
-                
-                // Ajout de l'équipe (Squad) : /teams/selectedTeamRef/squads
+                /////////////////////////////
+                // GESTION EQUIPE
+                // Nouvelle Equipe sur Firestore
                 if (!this.selectedSquad.id) {
-                  this.db.collection<Squad>(selectedTeamRef.path+'/squads').add(this.selectedSquad)
+                  // Ajoute l'Equipe sur Firestore
+                  this.squadProvider.add(selectedTeamRef.id, this.selectedSquad)
+                    // Ajout Equipe OK
                     .then( selectedSquadRef => {
-      
-                      console.log('Equipe ajoutée');
-                      console.log(selectedSquadRef);
-
                       this.registrationSubmited = true;   // Utilisateur enregistré
                     })
+                    // ERREUR Ajout Equipe
                     .catch(err => {
                       console.error('Erreur lors de l\'ajout de l\'equipe');
                       console.error(err);
                     });
 
-                // Modifie l'équipe sur Firestore
+                // Equipe Existante
                 } else {
-                  this.db.doc<Team>('teams/'+selectedTeamRef.id+'/squads/'+this.selectedSquad.id).update(this.selectedSquad)
+                  // Modifie l'équipe sur Firestore
+                  this.squadProvider.update(selectedTeamRef.id, this.selectedSquad)
+                    // Modification Equipe OK
                     .then( () => {
-        
-                      console.log('Equipe modifiée');
-                      
                       this.registrationSubmited = true;   // Utilisateur enregistré
                     })
+                    // ERREUR Modification Equipe
                     .catch(err => {
                       console.error('Erreur lors de l\'ajout de l\'equipe');
                       console.error(err);
                     });
                 }
+                // FIN GESTION EQUIPE
+                /////////////////////////////
               }
             })
+            // ERREUR Ajout Club
             .catch(err => {
               console.error('Erreur lors de l\'ajout du club');
               console.error(err);
             });
 
-        // Modifie le club sur Firestore
+
+        // Club existant sur Firestore (Team) : /teams
         } else {
-          console.log('Club existant');
           // Le club n'est a modifié que si l'utilisateur est de type supporter (sinon c'est l'équipe qu'on modifie/ajoute)
           if (this.user.type == PeopleType.supporter) {
-            this.db.collection<Team>('teams').doc(this.selectedTeam.id).update(this.selectedTeam)
+            /////////////////////////////
+            // GESTION CLUB
+            // Modification Club sur Firestore
+            this.teamProvider.update(this.selectedTeam)
+              // Modification Club OK
               .then(() => {
-                console.log('Club modifié');
-                      
                 this.registrationSubmited = true;   // Utilisateur enregistré
               })
+              // ERREUR Modification Club
               .catch(err => {
                 console.error('Erreur lors de la modification du club');
                 console.error(err);
-              })
+              });
+            // FIN GESTION CLUB
+            /////////////////////////////
           } else {
-            // Ajout de l'équipe (Squad) : /teams/selectedTeamRef/squads
+            /////////////////////////////
+            // GESTION EQUIPE
+            // Nouvelle Equipe sur Firestore
             if (!this.selectedSquad.id) {
-              this.db.collection<Squad>('teams/'+this.selectedTeam.id+'/squads').add(this.selectedSquad)
+              // Ajoute l'Equipe sur Firestore
+              this.squadProvider.add(this.selectedTeam.id, this.selectedSquad)
+                // Ajout Equipe OK
                 .then( selectedSquadRef => {
-  
-                  console.log('Equipe ajoutée');
-                  console.log(selectedSquadRef);
-                      
                   this.registrationSubmited = true;   // Utilisateur enregistré
                 })
+                // ERREUR Ajout Equipe
                 .catch(err => {
                   console.error('Erreur lors de l\'ajout de l\'equipe');
                   console.error(err);
                 });
-            // Modifie l'équipe sur Firestore
+
+            // Equipe existante sur firestore
             } else {
-              this.db.doc<Team>('teams/'+this.selectedTeam.id+'/squads/'+this.selectedSquad.id).update(this.selectedSquad)
-                .then( () => {
-    
-                  console.log('Equipe modifiée');
-                      
+              // Modifie l'équipe sur Firestore
+              this.squadProvider.update(this.selectedTeam.id, this.selectedSquad)
+                // Modification Equipe OK
+                .then( () => { 
                   this.registrationSubmited = true;   // Utilisateur enregistré
                 })
+                // Erreur Modification Equipe
                 .catch(err => {
                   console.error('Erreur lors de l\'ajout de l\'equipe');
                   console.error(err);
                 });
             }
+            // FIN GESTION EQUIPE
+            /////////////////////////////
           }
         }
+        // FIN GESTION CLUB
+        /////////////////////////////
       })
+      // ERREUR Ajout utilisateur
       .catch(err => {
         console.error('Erreur lors de l\'ajout de l\'utilisateur');
         console.error(err);
       });
+  // FIN GESTION UTILISATEUR
+  /////////////////////////////
   }
 }

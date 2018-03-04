@@ -1,10 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, Modal, Button } from 'ionic-angular';
 
-import { UtilsProvider } from '../../providers/utils/utils.provider';
-
-import { Team, Squad, SquadCategory } from '../../models/team/team.model';
-import { GenderType } from '../../models/people/people.model';
+import { Team } from '../../models/team/team.model';
 import { TeamProvider } from '../../providers/team/team.provider';
 import { ColorPickerComponent } from '../../components/color-picker/color-picker';
 

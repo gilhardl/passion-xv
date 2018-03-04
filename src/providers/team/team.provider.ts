@@ -1,6 +1,7 @@
 
 import { Injectable } from "@angular/core";
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from "angularfire2/firestore";
+import { firestore } from "firebase/app";
+import { AngularFirestore, AngularFirestoreCollection } from "angularfire2/firestore";
 import { Observable } from 'rxjs/Observable';
 // Imports pour la recherche
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -8,18 +9,16 @@ import "rxjs/add/operator/switchMap";
 import "rxjs/add/observable/zip";
 
 import { Team, Squad } from '../../models/team/team.model';
-import { People } from "../../models/people/people.model";
-import { Stadium } from "../../models/stadium/stadium.model";
 
 import { StadiumProvider } from "../stadium/stadium.provider";
 
 @Injectable()
 export class TeamProvider {
 
-    private teamCollection: AngularFirestoreCollection<Team>
+    private teamsRef: AngularFirestoreCollection<Team>
 
-    constructor(private aFirestore: AngularFirestore, private stadiumProvider: StadiumProvider) {
-        this.teamCollection = this.aFirestore.collection<Team>('teams');
+    constructor(private db: AngularFirestore, private stadiumProvider: StadiumProvider) {
+        this.teamsRef = this.db.collection<Team>('teams');
     }
 
     create(): Team {
@@ -33,47 +32,55 @@ export class TeamProvider {
         };
     }
 
+    // Renvoi tous les clubs
     getAll(): Observable<Team[]> {
-        return this.teamCollection.valueChanges();
+        return this.teamsRef.snapshotChanges().map(actions => {
+            return actions.map(action => {
+                const data = action.payload.doc.data() as Team;
+                const id = action.payload.doc.id;
+                return { id, ...data };
+            });
+          });
     }
 
-    get(uid: string): Observable<Team> {
-        return this.teamCollection.doc<Team>(uid).valueChanges();
+    // Renvoi  un Club
+    get(id: string): Observable<Team> {
+        return this.teamsRef.doc<Team>(id).valueChanges();
     }
 
-    add(team: Team) {
-        return this.teamCollection.add(team);
+    // Ajoute le club sur Firestore (Team) : /teams
+    add(team: Team): Promise<firestore.DocumentReference> {
+        return this.teamsRef.add(team);
     }
 
-    update(team: Team) {
-        return this.teamCollection.doc<Team>(team.name).set(team);
+    // Modifie le club sur Firestore
+    update(team: Team): Promise<void> {
+        return this.teamsRef.doc<Team>(team.id).update(team);
     }
 
-    remove(team: Team) {
-        return this.teamCollection.doc<Team>(team.name).delete();
+    // Supprime le club sur Firestore
+    delete(team: Team) {
+        return this.teamsRef.doc<Team>(team.id).delete();
     }
 
+    // Renvoi les équipes du club sur Firestore
     getSquads(team: Team): Observable<Squad[]> {
-        return this.teamCollection.doc<Team>(team.name).collection<Squad>('squads').valueChanges();
+        return this.teamsRef.doc<Team>(team.id).collection<Squad>('squads').valueChanges();
     }
 
+    // Recherche un club
     search( start: BehaviorSubject<string>, end: BehaviorSubject<string>): Observable<Team[]> {
-        return this.getAll();
-        
-        // Observable.zip(start, end).switchMap( param => {
-        //     return this.db.list("/teams", ref =>
-        //         ref.orderByChild("name")
-        //             .limitToFirst(10)
-        //             .startAt(param[0])
-        //             .endAt(param[1])
-        //     )
-        //     .snapshotChanges()
-        //     .map(changes => {
-        //     return changes.map(c => ({
-        //         key: c.payload.key,
-        //         ...c.payload.val()
-        //         }));
-        //     });
-        // });
+        // return this.getAll();
+        return Observable.zip(start, end).switchMap( param => {
+            let s = param[0];   if (!s) { s = ''; }
+            let e = param[1];   if (!e) { e = '\uf8ff'; }
+            return this.db.collection<Team>('/teams', ref => ref.orderBy("name").startAt(s).endAt(e)).snapshotChanges().map(actions => {
+                return actions.map(action => {
+                    const data = action.payload.doc.data() as Team;
+                    const id = action.payload.doc.id;
+                    return { id, ...data };
+                });
+              });;
+        });
       }
 }

@@ -1,18 +1,19 @@
 
 import { Injectable } from "@angular/core";
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from "angularfire2/firestore";
+import { firestore } from "firebase/app";
+import { AngularFirestore, AngularFirestoreCollection } from "angularfire2/firestore";
 import { Observable } from 'rxjs/Observable';
 
 import { People, PeopleType } from '../../models/people/people.model';
-import { firestore } from "firebase/app";
+import { snapshotChanges } from "angularfire2/database";
 
 @Injectable()
 export class PeopleProvider {
 
-    private peopleCollection: AngularFirestoreCollection<People>
+    private peoplesRef: AngularFirestoreCollection<People>
 
-    constructor(private aFirestore: AngularFirestore) {
-        this.peopleCollection = this.aFirestore.collection<People>('peoples');
+    constructor(private db: AngularFirestore) {
+        this.peoplesRef = this.db.collection<People>('peoples');
     }
 
     create(): People {
@@ -23,32 +24,39 @@ export class PeopleProvider {
         };
     }
 
+    // Renvoi tous les utilisateurs
     getAll(): Observable<People[]> {
-        return this.peopleCollection.valueChanges();
+        return this.peoplesRef.snapshotChanges().map(actions => {
+            return actions.map(action => {
+                const data = action.payload.doc.data() as People;
+                const id = action.payload.doc.id;
+                return { id, ...data };
+            });
+          });
     }
 
-    get(peopleRef: firestore.DocumentReference): Observable<People> {
-        return this.peopleCollection.doc<People>(peopleRef.path).valueChanges();
+    // Renvoi une personne
+    get(id: string): Observable<People> {
+        return this.peoplesRef.doc<People>(id).valueChanges();
     }
 
-    getByUserUid(userUid: string) {
-        return undefined;
-        // this.peopleRef.query
-        //     .orderByChild('userKey').equalTo(userKey)
-        //     .once('value', snapchot => {
-        //       console.log(snapchot.val());
-        //     });
+    exists(id: string) {
+        return this.db.firestore.collection('/teams').doc(id).get();
     }
 
-    add(people: People) {
-        return this.peopleCollection.add(people);
+    // Ajoute une pesonne sur Firestore (People) : /peoples
+    add(people: People): Promise<void> {
+        return this.peoplesRef.doc(people.userUid).set(people);
     }
 
-    update(people: People) {
-        // return this.peopleCollection.update(people.key, people);
+    // Modifie une personne
+    update(people: People): Promise<void> {
+        return this.peoplesRef.doc<People>(people.id).update(people);
     }
 
-    remove(people: People) {
-        // return this.peopleRef.remove(people.key);
+    // Supprime une personne
+    remove(people: People): Promise<void> {
+        // TODO: Supprimer toutes les occurences de son id dans toutes ses équipes
+        return this.peoplesRef.doc<People>(people.id).delete();
     }
 }

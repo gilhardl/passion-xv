@@ -1,7 +1,5 @@
 
-import { AngularFirestoreCollection } from 'angularfire2/firestore';
-
-import { People, GenderType } from '../people/people.model';
+import { GenderType } from '../people/people.model';
 import { Stadium } from '../stadium/stadium.model';
 
 export interface Team {

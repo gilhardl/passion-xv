@@ -20,8 +20,7 @@ export class MyApp {
   selectedTeam: string = 'rcbseniors';
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, keyboard: Keyboard,
-    public appCtrl: App, public menuCtrl: MenuController,
-    private peopleService: PeopleProvider) {
+    public appCtrl: App, public menuCtrl: MenuController, private peopleProvider: PeopleProvider) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -46,21 +45,21 @@ export class MyApp {
           this.appCtrl.getActiveNavs()[0].setRoot('page-getting-started', {userUid: user.uid, displayName: user.displayName, email: user.email});  // Affiche le Get started
           //// FIN POUR TESTS (ce qui suit est à réactiver une fois les tests finis)
           
-          // // On vérifie s'il existe un People en BDD avec l'userKey de l'utilisateur connecté
-          // this.peopleService.getByUserUid(user.uid)
-          //   .then( snapchot => {
-          //     if(snapchot.val() == undefined) {
-          //       // Nouvel utilisateur
-          //       this.appCtrl.getActiveNavs()[0].setRoot('page-getting-started', {userUid: user.uid, displayName: user.displayName, email: user.email});  // Affiche le Get started
-          //     } else {
-          //       // Utilisateur existant
-          //       if (currentView == 'LoginPage'){
-          //         this.menuCtrl.enable(true); // Active le menu
-          //         this.menuCtrl.swipeEnable(true); // Permet le swipe sur le menu
-          //         this.appCtrl.getActiveNavs()[0].setRoot('page-tabs'); // Affiche l'accueil
-          //       }
-          //     }
-          //   });
+          // On vérifie s'il existe un People en BDD avec l'userKey de l'utilisateur connecté
+          this.peopleProvider.exists(user.uid)
+            .then( snapchot => {
+              if(snapchot.exists) {
+                // Utilisateur existant
+                if (currentView == 'LoginPage'){
+                  this.menuCtrl.enable(true); // Active le menu
+                  this.menuCtrl.swipeEnable(true); // Permet le swipe sur le menu
+                  this.appCtrl.getActiveNavs()[0].setRoot('page-tabs'); // Affiche l'accueil
+                }
+              } else {
+                // Nouvel utilisateur
+                this.appCtrl.getActiveNavs()[0].setRoot('page-getting-started', {userUid: user.uid, displayName: user.displayName, email: user.email});  // Affiche le Get started
+              }
+            });
 
           // Utilisateur déconnecté
         } else {

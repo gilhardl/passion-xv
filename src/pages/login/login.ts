@@ -94,8 +94,8 @@ export class LoginPage {
   logInGoogle() {
     this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then( result => {
-        var token = result.credential.accessToken;  // This gives you a Google Access Token. You can use it to access the Google API.
-        var user = result.user;
+        // var token = result.credential.accessToken;  // This gives you a Google Access Token. You can use it to access the Google API.
+        // var user = result.user;
       })
       .catch( (error) => {
         // Si il y a une erreur on affiche un toast
@@ -122,10 +122,8 @@ export class LoginPage {
     //     return firebase.auth().getRedirectResult();
     //   })
     //   .then( result => {
-    //     var token = result.credential.accessToken;  // This gives you a Google Access Token. You can use it to access the Google API.
-    //     var user = result.user;
-    //     console.log(token);
-    //     console.log(user);
+    //     // var token = result.credential.accessToken;  // This gives you a Google Access Token. You can use it to access the Google API.
+    //     // var user = result.user;
     //   })
     //   .catch( (error) => {
     //     // Si il y a une erreur on affiche un toast

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 
 import { AddSquadPage } from './add-squad';
-import { SquadProvider } from '../../providers/squad/squad.provider';
 import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
